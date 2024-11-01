@@ -239,7 +239,7 @@ class HomePage extends StatelessWidget {
               SizedBox(width: 5), // Memberi jarak antara ikon dan teks
               Text(
                 'Gedong Air, Lampung, Indonesia',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.w600),
               ),
             ],
           ),
