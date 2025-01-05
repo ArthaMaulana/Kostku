@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "925074239036",
+    "project_id": "kostku-7c50f",
+    "storage_bucket": "kostku-7c50f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925074239036:android:20e312c9dde800b3d6dd39",
+        "android_client_info": {
+          "package_name": "Kostku.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuIwcuiR367Sy69c_H88MamK76SJh6ois"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
