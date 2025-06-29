@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:kos/nav.dart';
 import 'package:kos/views/dashboard/detail_page.dart';
+import 'package:kos/views/discover/discover_page.dart';
+import 'package:kos/views/favorite/favorite_page.dart';
+import 'package:kos/views/profile/profile_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,139 +22,196 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+  final PageController _pageController = PageController();
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _pageController.animateToPage(
+        index,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        toolbarHeight: 5,
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        children: [
+          _buildHomePage(),
+          DiscoverPage(),
+          FavoritePage(),
+          ProfilePage(),
+        ],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Hello, Artha!',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          "Let's Start Exploring 👋",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue),
-                        ),
-                      ],
-                    ),
-                    CircleAvatar(
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+
+  Widget _buildHomePage() {
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Hello, Artha!',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "Let's Start Exploring 👋",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = 3;
+                        _pageController.animateToPage(
+                          3,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      });
+                    },
+                    child: CircleAvatar(
                       radius: 25,
                       backgroundImage: AssetImage('assets/images/pict.jpg'),
                     ),
-                  ],
-                ),
-                SizedBox(height: 25),
-                _buildSearchBox(),
-                SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Popular Kost',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text('See All'),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 235.0, // Menentukan tinggi setiap Row
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _buildHotelCard(
-                                context,
-                                imageUrl: 'assets/images/villa1.jpg',
-                                name: 'The Karma Kost',
-                                location: 'Gang Senin, Lampung',
-                                price: 69,
-                                rating: 4.8,
-                              ),
-                              SizedBox(width: 10),
-                              _buildHotelCard(
-                                context,
-                                imageUrl: 'assets/images/villa2.webp',
-                                name: 'Emeralda Deluxe',
-                                location: 'Kuta, Badung, Bali',
-                                price: 89,
-                                rating: 4.6,
-                              ),
-                            ],
-                          ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 25),
+              _buildSearchBox(),
+              SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Popular Kost',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _selectedIndex = 1;
+                        _pageController.animateToPage(
+                          1,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      });
+                    },
+                    child: Text('See All'),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 235.0, // Menentukan tinggi setiap Row
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _buildHotelCard(
+                              context,
+                              imageUrl: 'assets/images/villa1.jpg',
+                              name: 'The Karma Kost',
+                              location: 'Gang Senin, Lampung',
+                              price: 69,
+                              rating: 4.8,
+                            ),
+                            SizedBox(width: 10),
+                            _buildHotelCard(
+                              context,
+                              imageUrl: 'assets/images/villa2.webp',
+                              name: 'Emeralda Deluxe',
+                              location: 'Kuta, Badung, Bali',
+                              price: 89,
+                              rating: 4.6,
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          height: 1,
+                      ),
+                      SizedBox(
+                        height: 1,
+                      ),
+                      SizedBox(
+                        height: 250.0, // Menentukan tinggi setiap Row
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _buildHotelCard(
+                              context,
+                              imageUrl: 'assets/images/villa1.jpg',
+                              name: 'The Karma Kost',
+                              location: 'Gang Senin, Lampung',
+                              price: 69,
+                              rating: 4.8,
+                            ),
+                            SizedBox(width: 10),
+                            _buildHotelCard(
+                              context,
+                              imageUrl: 'assets/images/villa2.webp',
+                              name: 'Emeralda Deluxe',
+                              location: 'Kuta, Badung, Bali',
+                              price: 89,
+                              rating: 4.6,
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          height: 250.0, // Menentukan tinggi setiap Row
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _buildHotelCard(
-                                context,
-                                imageUrl: 'assets/images/villa1.jpg',
-                                name: 'The Karma Kost',
-                                location: 'Gang Senin, Lampung',
-                                price: 69,
-                                rating: 4.8,
-                              ),
-                              SizedBox(width: 10),
-                              _buildHotelCard(
-                                context,
-                                imageUrl: 'assets/images/villa2.webp',
-                                name: 'Emeralda Deluxe',
-                                location: 'Kuta, Badung, Bali',
-                                price: 89,
-                                rating: 4.6,
-                              ),
-                            ],
-                          ),
-                        ), // Anda bisa menambahkan Row lain di sini jika diperlukan
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                      ), // Anda bisa menambahkan Row lain di sini jika diperlukan
+                    ],
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: 0,
-        onTap: (index) {},
       ),
     );
   }
@@ -306,15 +366,14 @@ class HomePage extends StatelessWidget {
       child: Container(
         width: 190,
         margin: EdgeInsets.only(left: 1, right: 1),
-        padding: EdgeInsets.only(left: 6, right: 6, top: 6),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 1,
-              blurRadius: 3,
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 0,
+              blurRadius: 8,
               offset: Offset(0, 2),
             ),
           ],
@@ -327,36 +386,44 @@ class HomePage extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(20),
-                    bottom: Radius.circular(12),
+                    top: Radius.circular(12),
                   ),
                   child: Image.asset(
                     imageUrl,
-                    height: 150, // Contoh pengaturan ketinggian gambar
+                    height: 130,
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
                 ),
                 Positioned(
-                  top: 9,
-                  right: 9,
+                  top: 8,
+                  right: 8,
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white.withOpacity(0.9),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 0,
+                          blurRadius: 4,
+                          offset: Offset(0, 1),
+                        ),
+                      ],
                     ),
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.star, color: Colors.yellow[700], size: 16),
-                        SizedBox(width: 2),
+                        Icon(Icons.star, color: Colors.amber, size: 14),
+                        SizedBox(width: 4),
                         Text(
                           rating.toString(),
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: Colors.white),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            color: Colors.black87,
+                          ),
                         ),
                       ],
                     ),
@@ -365,32 +432,73 @@ class HomePage extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.all(6.0),
+              padding: const EdgeInsets.all(12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(name,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                  SizedBox(height: 2),
+                  Text(
+                    name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: Colors.black87,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 4),
                   Row(
                     children: [
                       Icon(
                         Ionicons.location_outline,
-                        size: 18,
-                        color: Colors.blue,
+                        size: 14,
+                        color: Colors.grey[600],
                       ),
-                      Text(location,
+                      SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          location,
                           style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600)),
+                            color: Colors.grey[600],
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                     ],
                   ),
-                  SizedBox(height: 2),
-                  Text('\$$price / month',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(
+                        'Rp',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(width: 2),
+                      Text(
+                        price.toStringAsFixed(0),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      Text(
+                        ' /month',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
